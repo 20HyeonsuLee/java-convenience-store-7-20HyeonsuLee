@@ -22,11 +22,44 @@ class PromotionTest {
                     1,
                     period
             );
-            assertThat(promotion.getBuy()).isEqualTo(1);
-            assertThat(promotion.getGet()).isEqualTo(1);
+            assertThat(promotion.getRequiredQuantity()).isEqualTo(1);
+            assertThat(promotion.getFreeQuantity()).isEqualTo(1);
             assertThat(promotion.getName()).isEqualTo("반짝할인");
-            assertThat(promotion.getPeriod().getStartDate()).isEqualTo(period.getStartDate());
-            assertThat(promotion.getPeriod().getEndDate()).isEqualTo(period.getEndDate());
+            assertThat(promotion.isPeriod()).isTrue();
+        });
+    }
+
+    @Test
+    void 오늘이_프로모션_기간이라면_isPeriod_는_true이다() {
+        assertSimpleTest(() -> {
+            Period period = new Period(
+                    LocalDate.now().minusDays(10),
+                    LocalDate.now()
+            );
+            Promotion promotion = new Promotion(
+                    "반짝할인",
+                    1,
+                    1,
+                    period
+            );
+            assertThat(promotion.isPeriod()).isTrue();
+        });
+    }
+
+    @Test
+    void 오늘이_프로모션_기간이_아니라면_isPeriod_는_false이다() {
+        assertSimpleTest(() -> {
+            Period period = new Period(
+                    LocalDate.now().minusDays(10),
+                    LocalDate.now().minusDays(1)
+            );
+            Promotion promotion = new Promotion(
+                    "반짝할인",
+                    1,
+                    1,
+                    period
+            );
+            assertThat(promotion.isPeriod()).isFalse();
         });
     }
 }

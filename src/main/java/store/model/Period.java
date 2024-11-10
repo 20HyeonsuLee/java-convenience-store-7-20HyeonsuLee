@@ -1,5 +1,6 @@
 package store.model;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
 
 public class Period {
@@ -19,11 +20,8 @@ public class Period {
         }
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
+    public boolean isPeriod() {
+        LocalDate now = LocalDate.from(DateTimes.now());
+        return !now.isBefore(startDate) && !now.isAfter(endDate);
     }
 }

@@ -19,14 +19,24 @@ public class Quantity {
         return count;
     }
 
-    public void minus(Integer count) {
-        validateCount(count);
-        this.count = count;
+    public void decreaseBy(Integer quantity) {
+        this.count -= quantity;
     }
 
-    private void validateCount(Integer count) {
-        if (this.count - count < 0) {
-            throw new IllegalArgumentException("구매할 수량만큼의 재고가 존재하지 않습니다.");
-        }
+    public void increaseBy(Integer quantity) {
+        this.count += quantity;
     }
+
+    public Quantity minus(Quantity quantity) {
+        return new Quantity(this.count - quantity.count);
+    }
+
+    public boolean isLessThan(Quantity quantity) {
+        return this.count < quantity.getCount();
+    }
+
+    public boolean isGreaterThan(Quantity quantity) {
+        return this.count > quantity.getCount();
+    }
+
 }

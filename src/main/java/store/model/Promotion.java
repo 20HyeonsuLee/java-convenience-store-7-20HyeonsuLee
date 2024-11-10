@@ -3,14 +3,14 @@ package store.model;
 public class Promotion {
 
     private String name;
-    private Integer buy;
-    private Integer get;
+    private Integer requiredQuantity;
+    private Integer freeQuantity;
     private Period period;
 
-    public Promotion(String name, Integer buy, Integer get, Period period) {
+    public Promotion(String name, Integer requiredQuantity, Integer freeQuantity, Period period) {
         this.name = name;
-        this.buy = buy;
-        this.get = get;
+        this.requiredQuantity = requiredQuantity;
+        this.freeQuantity = freeQuantity;
         this.period = period;
     }
 
@@ -18,15 +18,19 @@ public class Promotion {
         return name;
     }
 
-    public Integer getBuy() {
-        return buy;
+    public Integer getRequiredQuantity() {
+        return requiredQuantity;
     }
 
-    public Integer getGet() {
-        return get;
+    public Integer getFreeQuantity() {
+        return freeQuantity;
     }
 
-    public Period getPeriod() {
-        return period;
+    public boolean isPeriod() {
+        return period.isPeriod();
+    }
+
+    public Integer getTotalQuantityForPromotion() {
+        return requiredQuantity + freeQuantity;
     }
 }
