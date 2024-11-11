@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.function.Supplier;
 import store.dto.InputProductDTO;
 import store.dto.InputPromotionDTO;
+import store.dto.OutputReceiptDTO;
 import store.model.Order;
+import store.model.Receipt;
 import store.service.StoreService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -25,8 +27,16 @@ public class StoreController {
         List<Order> orders = handleInput(this::inputOrder);
         reOrderPromotion(orders);
         reOrderRegular(orders);
+        reStoreWhenEmptyOrders(orders);
+        Receipt receipt = storeService.buy(orders, handleInput(this::inputMembershipConfirm));
+        outputView.printReceipt(OutputReceiptDTO.from(receipt));
     }
 
+
+    private boolean inputMembershipConfirm() {
+        String confirm = inputView.inputMemberShip();
+        return Parser.parseConfirm(confirm);
+    }
 
     private void validateOrdersQuantity(List<Order> orders) {
         orders.forEach(storeService::validateOrderQuantity);
@@ -39,6 +49,14 @@ public class StoreController {
                 storeService.reOrderOrder(order, handleInput(() -> inputReOrderRegular(order, requiredRegularQuantity)));
             }
         });
+    }
+
+    private void reStoreWhenEmptyOrders(List<Order> orders) {
+        orders.removeIf(order -> order.getQuantity().getCount() <= 0);
+        if (orders.isEmpty()) {
+            outputView.printEmptyOrder();
+            run();
+        }
     }
 
     private boolean inputReOrderRegular(Order order, Integer count) {
