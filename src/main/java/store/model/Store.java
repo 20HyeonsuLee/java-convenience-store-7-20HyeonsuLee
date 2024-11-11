@@ -6,7 +6,7 @@ public class Store {
 
     private final Products products = new Products();
     private final Promotions promotions = new Promotions();
-    private final double MEMBERSHIP_DISCOUNT_PERCENT = 0.3;
+    private static final double MEMBERSHIP_DISCOUNT_PERCENT = 0.3;
 
     public Products getProducts() {
         return products;
@@ -30,14 +30,14 @@ public class Store {
 
     public Integer getRequiredFreeQuantity(Order order) {
         Product product = products.find(order.getName());
-        Integer quantity = order.getQuantity();
+        Integer orderQuantity = order.getQuantity();
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionStock().count() < quantity + product.getPromotion().getFreeQuantity()) {
+        if (product.getPromotionStock().count() < orderQuantity + product.getPromotion().getFreeQuantity()) {
             return 0;
         }
-        if (quantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
+        if (orderQuantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
             return product.getPromotion().getFreeQuantity();
         }
         return 0;
