@@ -49,7 +49,7 @@ public class Parser {
     private static Integer parseQuantity(String quantity) {
         try {
             return Integer.parseInt(quantity);
-        }catch (NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             throw new InputFormatException();
         }
     }

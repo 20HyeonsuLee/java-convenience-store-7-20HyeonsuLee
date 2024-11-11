@@ -11,7 +11,7 @@ class ProductTest {
     @Test
     void 일반_상품을_생성한다() {
         assertSimpleTest(() -> {
-            Product product = new Product("콜라",1000,null, new Stock(10));
+            Product product = new Product("콜라", 1000, null, new Stock(10));
             assertThat(product.getName()).isEqualTo("콜라");
             assertThat(product.getPrice()).isEqualTo(1000);
             assertThat(product.getPromotion()).isNull();
@@ -28,8 +28,8 @@ class ProductTest {
                     DateTimes.now().minusDays(10).toLocalDate(),
                     DateTimes.now().toLocalDate()
             );
-            Promotion promotion = new Promotion("탄산",2,1, period);
-            Product product = new Product("콜라",1000, promotion, new Stock(10));
+            Promotion promotion = new Promotion("탄산", 2, 1, period);
+            Product product = new Product("콜라", 1000, promotion, new Stock(10));
             assertThat(product.getName()).isEqualTo("콜라");
             assertThat(product.getPrice()).isEqualTo(1000);
             assertThat(product.getPromotion()).isNotNull();

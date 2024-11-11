@@ -30,7 +30,7 @@ public record InputPromotionDTO(
     public static Integer parseInteger(String price) {
         try {
             return Integer.parseInt(price);
-        }catch (NumberFormatException exception) {
+        } catch (NumberFormatException exception) {
             throw new InputFormatException();
         }
     }

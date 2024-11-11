@@ -86,9 +86,12 @@ public class OutputView {
 
     private void appendSummary(PrintStringBuilder stringBuilder, OutputReceiptDTO outputReceiptDTO) {
         stringBuilder.appendLine(OUTPUT_RECEIPT_RESULT_DIV.format());
-        stringBuilder.appendLine(OUTPUT_TOTAL_ORDER_PRICE.format(TATAL_PRICE_HEADER, outputReceiptDTO.totalCount(), outputReceiptDTO.totalPrice()));
-        stringBuilder.appendLine(OUTPUT_PROMOTION_DISCOUNT_PRICE.format(PROMOTION_HEADER, outputReceiptDTO.promotionDiscount()));
-        stringBuilder.appendLine(OUTPUT_MEMBERSHIP_DISCOUNT_PRICE.format(MEMBERSHIP_HEADER, outputReceiptDTO.memberShipDiscount()));
+        stringBuilder.appendLine(OUTPUT_TOTAL_ORDER_PRICE.format(TATAL_PRICE_HEADER, outputReceiptDTO.totalCount(),
+                outputReceiptDTO.totalPrice()));
+        stringBuilder.appendLine(
+                OUTPUT_PROMOTION_DISCOUNT_PRICE.format(PROMOTION_HEADER, outputReceiptDTO.promotionDiscount()));
+        stringBuilder.appendLine(
+                OUTPUT_MEMBERSHIP_DISCOUNT_PRICE.format(MEMBERSHIP_HEADER, outputReceiptDTO.memberShipDiscount()));
         stringBuilder.appendLine(OUTPUT_PAYMENT_PRICE.format(AMOUNT_HEADER, outputReceiptDTO.amount()));
     }
 }

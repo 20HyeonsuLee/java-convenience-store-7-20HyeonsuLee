@@ -19,8 +19,7 @@ public enum Message {
     OUTPUT_PROMOTION_DISCOUNT_PRICE("%-25s%,10d"),
     OUTPUT_MEMBERSHIP_DISCOUNT_PRICE("%-25s%,10d"),
     OUTPUT_PAYMENT_PRICE("%-25s%,10d"),
-    OUTPUT_EMPTY_ORDER("주문할 상품이 없습니다. 프로그램을 다시 시작합니다.")
-    ;
+    OUTPUT_EMPTY_ORDER("주문할 상품이 없습니다. 프로그램을 다시 시작합니다.");
 
     private final String message;
 
