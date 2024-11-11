@@ -1,58 +1,71 @@
 package store.model.product;
 
-import java.util.Map;
-import java.util.TreeMap;
-import store.model.Promotion;
+import java.util.ArrayList;
+import java.util.List;
+import store.exception.ProductNotFountException;
+import store.model.Order;
 import store.model.Quantity;
 
 public class Products {
-    private final Map<ProductName, ProductInfo> products = new TreeMap<>();
+    private final List<Product> products = new ArrayList<>();
 
-    public void putNormal(ProductName productName, Integer price, Quantity quantity) {
-        ProductInfo productInfo = products.getOrDefault(productName, new ProductInfo(price));
-        productInfo.increaseRegularQuantity(quantity);
-        products.put(productName, productInfo);
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void putPromotion(ProductName productName, Integer price, Quantity quantity, Promotion promotion) {
-        ProductInfo productInfo = products.getOrDefault(productName, new ProductInfo(price));
-        productInfo.setPromotion(promotion);
-        productInfo.setPromotionQuantity(quantity);
-        products.put(productName, productInfo);
+    public void addProduct(Product product) {
+        products.stream()
+                .filter(existingProduct -> existingProduct.getName().equals(product.getName()))
+                .findFirst()
+                .ifPresentOrElse(
+                        existingProduct -> updateProduct(existingProduct, product),
+                        () -> products.add(product)
+                );
     }
 
-    public Quantity getTotalQuantity(ProductName productName) {
-        return products.get(productName).getTotalQuantity();
+    public Product find(String name) {
+        return products.stream()
+                .filter(product -> product.getName().equals(name))
+                .findFirst()
+                .orElseThrow(ProductNotFountException::new);
     }
 
-    public Integer getRequiredPromotionCount(ProductName productName, Quantity quantity) {
-        ProductInfo productInfo = getProductInfo(productName);
+    public Integer getPromotableCount(Order order) {
+        Product productInfo = find(order.getName());
+        Quantity quantity = order.getQuantity();
         if (!productInfo.isPromotionPeriod()) {
             return 0;
         }
-        int notPromotedCount = quantity.getCount() % productInfo.getTotalQuantityForPromotion();
-        int requiredQuantityForPromotion = (int) (Math.ceil((double) quantity.getCount() / productInfo.getTotalQuantityForPromotion()) * productInfo.getTotalQuantityForPromotion());
-        if (
-                notPromotedCount != 0 &&
-                requiredQuantityForPromotion <= productInfo.getPromotionQuantity().getCount()
-        ) {
-            return productInfo.getTotalQuantityForPromotion() - notPromotedCount;
-        }
-       return 0;
-    }
-
-    public Quantity getPromotableBuyQuantity(ProductName productName, Quantity quantity) {
-        ProductInfo productInfo = getProductInfo(productName);
         if (productInfo.getPromotionQuantity().getCount() <= quantity.getCount()) {
-            return new Quantity(productInfo.getPromotionQuantity().getCount() / productInfo.getTotalQuantityForPromotion() * productInfo.getTotalQuantityForPromotion());
+            return productInfo.getPromotionQuantity().getCount() / productInfo.getTotalQuantityForPromotion().getCount();
         }
-        return new Quantity(quantity.getCount() / productInfo.getTotalQuantityForPromotion() * productInfo.getTotalQuantityForPromotion());
+        return quantity.getCount() / productInfo.getTotalQuantityForPromotion().getCount();
     }
 
-    public ProductInfo getProductInfo(ProductName productName) {
-        if (!products.containsKey(productName)) {
-            throw new IllegalArgumentException("존재하지 않는 상품입니다.");
+    public Integer getPromotableQuantity(Order order) {
+        Product productInfo = find(order.getName());
+        if (!productInfo.isPromotionPeriod()) {
+            return 0;
         }
-        return products.get(productName);
+        return getPromotableCount(order) * productInfo.getTotalQuantityForPromotion().getCount();
+    }
+
+    private void updateProduct(Product existingProduct, Product newProduct) {
+        updateRegular(existingProduct, newProduct);
+        updatePromotion(existingProduct, newProduct);
+        existingProduct.setPrice(newProduct.getPrice());
+    }
+
+    private void updateRegular(Product existingProduct, Product newProduct) {
+        if (!newProduct.isPromotionProduct()) {
+            existingProduct.setRegularQuantity(newProduct.getRegularQuantity());
+        }
+    }
+
+    private void updatePromotion(Product existingProduct, Product newProduct) {
+        if (newProduct.isPromotionProduct()) {
+            existingProduct.setPromotionQuantity(newProduct.getPromotionQuantity());
+            existingProduct.setPromotion(newProduct.getPromotion());
+        }
     }
 }
