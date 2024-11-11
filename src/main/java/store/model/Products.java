@@ -28,24 +28,23 @@ public class Products {
                 .orElseThrow(ProductNotFountException::new);
     }
 
-    public Integer getPromotableCount(Order order) {
-        Product productInfo = find(order.getName());
-        Quantity quantity = order.getQuantity();
-        if (!productInfo.isPromotionPeriod()) {
+    public Integer getAppliedPromotionCount(Order order) {
+        Product product = find(order.getName());
+        if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (productInfo.getPromotionQuantity().getCount() <= quantity.getCount()) {
-            return productInfo.getPromotionQuantity().getCount() / productInfo.getTotalQuantityForPromotion().getCount();
+        if (product.getPromotionQuantity().getCount() <= order.getQuantity().getCount()) {
+            return product.getPromotionQuantity().getCount() / product.getTotalQuantityForPromotion();
         }
-        return quantity.getCount() / productInfo.getTotalQuantityForPromotion().getCount();
+        return order.getQuantity().getCount() / product.getTotalQuantityForPromotion();
     }
 
     public Integer getPromotableQuantity(Order order) {
-        Product productInfo = find(order.getName());
-        if (!productInfo.isPromotionPeriod()) {
+        Product product = find(order.getName());
+        if (!product.isPromotionPeriod()) {
             return 0;
         }
-        return getPromotableCount(order) * productInfo.getTotalQuantityForPromotion().getCount();
+        return getAppliedPromotionCount(order) * product.getTotalQuantityForPromotion();
     }
 
     private void updateProduct(Product existingProduct, Product newProduct) {

@@ -164,7 +164,7 @@ class ProductsTest {
                     null,
                     new Quantity(10)
             ));
-            assertThat(products.getPromotableCount(new Order("콜라", new Quantity(10)))).isZero();
+            assertThat(products.getAppliedPromotionCount(new Order("콜라", new Quantity(10)))).isZero();
         });
     }
 
@@ -187,7 +187,7 @@ class ProductsTest {
                     promotion,
                     new Quantity(10)
             ));
-            assertThat(products.getPromotableCount(new Order(
+            assertThat(products.getAppliedPromotionCount(new Order(
                     "콜라",
                     new Quantity(10)
             ))).isEqualTo(3);
@@ -239,7 +239,7 @@ class ProductsTest {
                     promotion,
                     new Quantity(10)
             ));
-            assertThat(products.getPromotableCount(new Order(
+            assertThat(products.getAppliedPromotionCount(new Order(
                     "콜라",
                     new Quantity(15)
             ))).isEqualTo(3);

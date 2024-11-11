@@ -52,16 +52,16 @@ public class Product {
         return promotionQuantity;
     }
 
-    public Quantity getTotalQuantity() {
-        return new Quantity(regularQuantity.getCount() + getPromotionQuantity().getCount());
+    public Integer getTotalQuantity() {
+        return regularQuantity.getCount() + promotionQuantity.getCount();
     }
 
     public Integer getPrice() {
         return price;
     }
 
-    public Quantity getTotalQuantityForPromotion() {
-        return new Quantity(promotion.getTotalQuantityForPromotion());
+    public Integer getTotalQuantityForPromotion() {
+        return promotion.getTotalQuantityForPromotion();
     }
 
     public Promotion getPromotion() {

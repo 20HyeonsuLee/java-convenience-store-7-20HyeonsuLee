@@ -20,6 +20,10 @@ public class Quantity {
         return getRemainingQuantity(quantity);
     }
 
+    public void increaseBy(Integer quantity) {
+        this.count += quantity;
+    }
+
     private boolean hasEnoughQuantity(Integer quantity) {
         return this.count >= quantity;
     }
@@ -33,21 +37,4 @@ public class Quantity {
         decreaseQuantity(this.count);
         return remaining;
     }
-
-    public void increaseBy(Integer quantity) {
-        this.count += quantity;
-    }
-
-    public Quantity minus(Quantity quantity) {
-        return new Quantity(this.count - quantity.count);
-    }
-
-    public boolean isLessThan(Quantity quantity) {
-        return this.count < quantity.getCount();
-    }
-
-    public boolean isGreaterThan(Quantity quantity) {
-        return this.count > quantity.getCount();
-    }
-
 }

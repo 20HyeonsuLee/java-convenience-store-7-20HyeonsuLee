@@ -29,16 +29,15 @@ public class Store {
     }
 
     public Integer getRequiredFreeQuantity(Order order) {
-        String name = order.getName();
+        Product product = products.find(order.getName());
         Integer quantity = order.getQuantity().getCount();
-        Product product = products.find(name);
         if (!product.isPromotionPeriod()) {
             return 0;
         }
         if (product.getPromotionQuantity().getCount() < quantity + product.getPromotion().getFreeQuantity()) {
             return 0;
         }
-        if (quantity % product.getTotalQuantityForPromotion().getCount() == product.getPromotion().getRequiredQuantity()) {
+        if (quantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
             return product.getPromotion().getFreeQuantity();
         }
         return 0;
@@ -61,7 +60,7 @@ public class Store {
     private void buy(Order order, Receipt receipt, boolean isMembership) {
         Product product = products.find(order.getName());
         Integer promotableQuantity = products.getPromotableQuantity(order);
-        Integer promotableCount = products.getPromotableCount(order);
+        Integer promotableCount = products.getAppliedPromotionCount(order);
         product.getPromotionQuantity().decreaseBy(promotableQuantity);
         Integer reminderQuantity = order.getQuantity().getCount() - promotableQuantity;
         addMembershipDiscountPrice(receipt, product, isMembership, reminderQuantity);
