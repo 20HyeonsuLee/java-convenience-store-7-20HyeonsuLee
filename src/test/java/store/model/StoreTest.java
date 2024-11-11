@@ -5,11 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
-import org.assertj.core.error.ShouldBePeriod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import store.model.product.Product;
-import store.model.product.Products;
 
 class StoreTest {
 

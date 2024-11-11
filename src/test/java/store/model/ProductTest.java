@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.DateTimes;
 import org.junit.jupiter.api.Test;
-import store.model.product.Product;
 
 class ProductTest {
 

@@ -1,10 +1,8 @@
-package store.model.product;
+package store.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import store.exception.ProductNotFountException;
-import store.model.Order;
-import store.model.Quantity;
 
 public class Products {
     private final List<Product> products = new ArrayList<>();

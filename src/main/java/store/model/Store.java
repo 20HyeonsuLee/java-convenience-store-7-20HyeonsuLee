@@ -1,13 +1,12 @@
 package store.model;
 
 import java.util.List;
-import store.model.product.Product;
-import store.model.product.Products;
 
 public class Store {
 
     private final Products products = new Products();
     private final Promotions promotions = new Promotions();
+    private final double MEMBERSHIP_DISCOUNT_PERCENT = 0.3;
 
     public Products getProducts() {
         return products;
@@ -74,7 +73,7 @@ public class Store {
 
     private void addMembershipDiscountPrice(Receipt receipt, Product product, boolean isMembership, Integer quantity) {
         if (isMembership) {
-            receipt.addMembershipDiscountPrice((quantity * product.getPrice()) * 0.3);
+            receipt.addMembershipDiscountPrice((quantity * product.getPrice()) * MEMBERSHIP_DISCOUNT_PERCENT);
         }
     }
 

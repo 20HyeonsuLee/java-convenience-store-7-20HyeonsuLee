@@ -20,6 +20,13 @@ import store.dto.OutputReceiptDTO;
 
 public class OutputView {
 
+    private static final String LACK_QUANTITY_MESSAGE = "재고 없음";
+    private static final String TATAL_PRICE_HEADER = "총구매액";
+    private static final String PROMOTION_HEADER = "행사할인";
+    private static final String MEMBERSHIP_HEADER = "멤버십할인";
+    private static final String AMOUNT_HEADER = "내실돈";
+
+
     public void printEmptyOrder() {
         OUTPUT_EMPTY_ORDER.print();
     }
@@ -38,7 +45,7 @@ public class OutputView {
 
     private String convertQuantityFormat(Integer quantity) {
         if (quantity == 0) {
-            return "재고 없음";
+            return LACK_QUANTITY_MESSAGE;
         }
         return String.valueOf(quantity);
     }
@@ -79,9 +86,9 @@ public class OutputView {
 
     private void appendSummary(PrintStringBuilder stringBuilder, OutputReceiptDTO outputReceiptDTO) {
         stringBuilder.appendLine(OUTPUT_RECEIPT_RESULT_DIV.format());
-        stringBuilder.appendLine(OUTPUT_TOTAL_ORDER_PRICE.format("총구매액", outputReceiptDTO.totalCount(), outputReceiptDTO.totalPrice()));
-        stringBuilder.appendLine(OUTPUT_PROMOTION_DISCOUNT_PRICE.format("행사할인", outputReceiptDTO.promotionDiscount()));
-        stringBuilder.appendLine(OUTPUT_MEMBERSHIP_DISCOUNT_PRICE.format("멤버십할인", outputReceiptDTO.memberShipDiscount()));
-        stringBuilder.appendLine(OUTPUT_PAYMENT_PRICE.format("내실돈", outputReceiptDTO.amount()));
+        stringBuilder.appendLine(OUTPUT_TOTAL_ORDER_PRICE.format(TATAL_PRICE_HEADER, outputReceiptDTO.totalCount(), outputReceiptDTO.totalPrice()));
+        stringBuilder.appendLine(OUTPUT_PROMOTION_DISCOUNT_PRICE.format(PROMOTION_HEADER, outputReceiptDTO.promotionDiscount()));
+        stringBuilder.appendLine(OUTPUT_MEMBERSHIP_DISCOUNT_PRICE.format(MEMBERSHIP_HEADER, outputReceiptDTO.memberShipDiscount()));
+        stringBuilder.appendLine(OUTPUT_PAYMENT_PRICE.format(AMOUNT_HEADER, outputReceiptDTO.amount()));
     }
 }

@@ -1,7 +1,4 @@
-package store.model.product;
-
-import store.model.Promotion;
-import store.model.Quantity;
+package store.model;
 
 public class Product {
     private final String name;

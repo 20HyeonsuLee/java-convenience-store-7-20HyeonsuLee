@@ -12,9 +12,11 @@ import store.model.Promotion;
 import store.model.Quantity;
 import store.model.Receipt;
 import store.model.Store;
-import store.model.product.Product;
+import store.model.Product;
 
 public class StoreService {
+
+    private static final String EMPTY_PROMOTION = "";
 
     private final Store store = new Store();
 
@@ -53,8 +55,8 @@ public class StoreService {
     }
 
     public void reOrderOrder(Order order, boolean isConfirmed) {
-        if (isConfirmed) {
-            order.getQuantity().increaseBy(getRequiredFreeQuantity(order));
+        if (!isConfirmed) {
+            order.getQuantity().decreaseBy(store.getRequiredRegularQuantity(order));
         }
     }
 
@@ -95,7 +97,7 @@ public class StoreService {
                 product.getName(),
                 product.getPrice(),
                 product.getRegularQuantity().getCount(),
-                ""
+                EMPTY_PROMOTION
         );
     }
 
