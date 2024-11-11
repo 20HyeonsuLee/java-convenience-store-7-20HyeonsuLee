@@ -27,7 +27,7 @@ public class StoreService {
 
     public void validateOrderQuantity(Order order) {
         Product product = store.findProduct(order.getName());
-        if (product.getTotalStockQuantity() < order.getQuantity()) {
+        if (product.getTotalQuantity() < order.getQuantity()) {
             throw new QuantityOverflowException();
         }
     }

@@ -48,7 +48,7 @@ public class Store {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        return order.getQuantity() - products.getPromotableQuantity(order);
+        return order.getQuantity() - products.getTotalProductQuantityWithPromotion(order);
     }
 
     public Receipt buyOrders(List<Order> orders, boolean isMembership) {
@@ -59,15 +59,15 @@ public class Store {
 
     private void buy(Order order, Receipt receipt, boolean isMembership) {
         Product product = products.find(order.getName());
-        Integer promotableQuantity = products.getPromotableQuantity(order);
-        Integer promotableCount = products.getAppliedPromotionCount(order);
-        product.getPromotionStock().decreaseBy(promotableQuantity);
-        Integer reminderQuantity = order.getQuantity() - promotableQuantity;
-        addMembershipDiscountPrice(receipt, product, isMembership, reminderQuantity);
-        reminderQuantity = product.getPromotionStock().decreaseBy(reminderQuantity);
-        product.getRegularStock().decreaseBy(reminderQuantity);
+        Integer totalProductQuantityWithPromotion = products.getTotalProductQuantityWithPromotion(order);
+        Integer appliedPromotionCount = products.getAppliedPromotionCount(order);
+        product.getPromotionStock().decreaseBy(totalProductQuantityWithPromotion);
+        Integer reminderOrderQuantity = order.getQuantity() - totalProductQuantityWithPromotion;
+        addMembershipDiscountPrice(receipt, product, isMembership, reminderOrderQuantity);
+        reminderOrderQuantity = product.getPromotionStock().decreaseBy(reminderOrderQuantity);
+        product.getRegularStock().decreaseBy(reminderOrderQuantity);
         addOrderProduct(receipt, order, product);
-        addFreeProduct(receipt, promotableCount, order, product);
+        addFreeProduct(receipt, appliedPromotionCount, order, product);
     }
 
     private void addMembershipDiscountPrice(Receipt receipt, Product product, boolean isMembership, Integer quantity) {
@@ -84,13 +84,14 @@ public class Store {
         ));
     }
 
-    private void addFreeProduct(Receipt receipt, Integer promotionCount, Order order, Product product) {
-        if (promotionCount > 0) {
-            receipt.addFreeProduct(new ReceiptDetail(
-                    order.getName(),
-                    product.getPromotion().getFreeQuantity() * promotionCount,
-                    product.getPrice() * promotionCount
-            ));
+    private void addFreeProduct(Receipt receipt, Integer appliedPromotionCount, Order order, Product product) {
+        if (appliedPromotionCount == 0) {
+            return;
         }
+        receipt.addFreeProduct(new ReceiptDetail(
+                order.getName(),
+                product.getPromotion().getFreeQuantity() * appliedPromotionCount,
+                product.getPrice() * appliedPromotionCount
+        ));
     }
 }

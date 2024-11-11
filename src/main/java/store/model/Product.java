@@ -52,7 +52,7 @@ public class Product {
         return promotionStock;
     }
 
-    public Integer getTotalStockQuantity() {
+    public Integer getTotalQuantity() {
         return regularStock.count() + promotionStock.count();
     }
 

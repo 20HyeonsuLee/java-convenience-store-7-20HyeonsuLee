@@ -33,13 +33,11 @@ public class Products {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionStock().count() <= order.getQuantity()) {
-            return product.getPromotionStock().count() / product.getTotalQuantityForPromotion();
-        }
-        return order.getQuantity() / product.getTotalQuantityForPromotion();
+        int promotionStock = product.getPromotionStock().count();
+        return Math.min(promotionStock, order.getQuantity()) / product.getTotalQuantityForPromotion();
     }
 
-    public Integer getPromotableQuantity(Order order) {
+    public Integer getTotalProductQuantityWithPromotion(Order order) {
         Product product = find(order.getName());
         if (!product.isPromotionPeriod()) {
             return 0;

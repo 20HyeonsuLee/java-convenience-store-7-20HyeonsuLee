@@ -213,7 +213,7 @@ class ProductsTest {
                     promotion,
                     new Stock(10)
             ));
-            assertThat(products.getPromotableQuantity(new Order(
+            assertThat(products.getTotalProductQuantityWithPromotion(new Order(
                     "콜라",
                     10
             ))).isEqualTo(9);
