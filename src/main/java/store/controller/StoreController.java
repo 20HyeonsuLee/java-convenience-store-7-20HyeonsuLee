@@ -24,10 +24,26 @@ public class StoreController {
         printProduct();
         List<Order> orders = handleInput(this::inputOrder);
         reOrderPromotion(orders);
+        reOrderRegular(orders);
     }
+
 
     private void validateOrdersQuantity(List<Order> orders) {
         orders.forEach(storeService::validateOrderQuantity);
+    }
+
+    private void reOrderRegular(List<Order> orders) {
+        orders.forEach(order -> {
+            int requiredRegularQuantity = storeService.getRequiredRegularQuantity(order);
+            if (storeService.isPromotionOrder(order) && requiredRegularQuantity > 0) {
+                storeService.reOrderOrder(order, handleInput(() -> inputReOrderRegular(order, requiredRegularQuantity)));
+            }
+        });
+    }
+
+    private boolean inputReOrderRegular(Order order, Integer count) {
+        String confirm = inputView.inputNotPromotionProduct(order.getName(), count);
+        return Parser.parseConfirm(confirm);
     }
 
     private void reOrderPromotion(List<Order> orders) {
