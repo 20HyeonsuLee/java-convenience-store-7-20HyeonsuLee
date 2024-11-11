@@ -45,14 +45,14 @@ public class Product {
     }
 
     public Quantity getRegularQuantity() {
-        return new Quantity(regularQuantity.getCount());
+        return regularQuantity;
     }
 
     public Quantity getPromotionQuantity() {
         if (!isPromotionPeriod()) {
             return new Quantity(0);
         }
-        return new Quantity(promotionQuantity.getCount());
+        return promotionQuantity;
     }
 
     public Quantity getTotalQuantity() {
