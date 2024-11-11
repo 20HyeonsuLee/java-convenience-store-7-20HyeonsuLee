@@ -20,10 +20,6 @@ public class Stock {
         return getRemainingQuantity(quantity);
     }
 
-    public void increaseBy(Integer quantity) {
-        this.count += quantity;
-    }
-
     private boolean hasEnoughQuantity(Integer quantity) {
         return this.count >= quantity;
     }
