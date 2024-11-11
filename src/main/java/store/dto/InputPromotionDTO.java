@@ -1,5 +1,7 @@
 package store.dto;
 
+import static store.dto.Constant.DATA_FILE_FIELD_SEPERATOR;
+
 import java.time.LocalDate;
 import store.exception.InputFormatException;
 
@@ -11,7 +13,7 @@ public record InputPromotionDTO(
         LocalDate endDate
 ) {
     public static InputPromotionDTO from(String line) {
-        String[] parsed = line.split(",");
+        String[] parsed = line.split(DATA_FILE_FIELD_SEPERATOR);
         return new InputPromotionDTO(
                 parsed[0],
                 parseInteger(parsed[1]),

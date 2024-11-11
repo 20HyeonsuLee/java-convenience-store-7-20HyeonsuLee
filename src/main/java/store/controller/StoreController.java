@@ -6,7 +6,6 @@ import store.dto.InputProductDTO;
 import store.dto.InputPromotionDTO;
 import store.dto.OutputReceiptDTO;
 import store.model.Order;
-import store.model.Receipt;
 import store.service.StoreService;
 import store.view.InputView;
 import store.view.OutputView;
@@ -27,15 +26,22 @@ public class StoreController {
         List<Order> orders = handleInput(this::inputOrder);
         reOrderPromotion(orders);
         reOrderRegular(orders);
-        List<Order> cleanedOrders = cleanOrders(orders);
-        reStoreWhenEmptyOrders(cleanedOrders);
-        Receipt receipt = storeService.buy(cleanedOrders, handleInput(this::inputMembershipConfirm));
-        outputView.printReceipt(OutputReceiptDTO.from(receipt));
-        reTry();
+        orders = removeEmptyOrders(orders);
+        if (orders.isEmpty()) {
+            outputView.printEmptyOrder();
+            run();
+            return;
+        }
+        outputView.printReceipt(OutputReceiptDTO.from(storeService.buy(
+                orders,
+                handleInput(this::inputMembershipConfirm)
+        )));
+        retryIfConfirmed();
     }
 
-    private void reTry() {
-        if (handleInput(this::inputReOrderConfirm)) {
+    private void retryIfConfirmed() {
+        boolean retryConfirm = handleInput(this::inputReOrderConfirm);
+        if (retryConfirm) {
             run();
         }
     }
@@ -58,19 +64,13 @@ public class StoreController {
         orders.forEach(order -> {
             int requiredRegularQuantity = storeService.getRequiredRegularQuantity(order);
             if (storeService.isPromotionOrder(order) && requiredRegularQuantity > 0) {
-                storeService.reOrderOrder(order, handleInput(() -> inputReOrderRegular(order, requiredRegularQuantity)));
+                storeService.reOrderOrder(order,
+                        handleInput(() -> inputReOrderRegular(order, requiredRegularQuantity)));
             }
         });
     }
 
-    private void reStoreWhenEmptyOrders(List<Order> orders) {
-        if (orders.isEmpty()) {
-            outputView.printEmptyOrder();
-            run();
-        }
-    }
-
-    private List<Order> cleanOrders(List<Order> orders) {
+    private List<Order> removeEmptyOrders(List<Order> orders) {
         return orders.stream()
                 .filter(order -> order.getQuantity().getCount() != 0)
                 .toList();

@@ -1,5 +1,8 @@
 package store.dto;
 
+import static store.dto.Constant.DATA_FILE_FIELD_SEPERATOR;
+import static store.dto.Constant.NOT_PROMOTION;
+
 import store.exception.InputFormatException;
 
 public record InputProductDTO(
@@ -9,7 +12,7 @@ public record InputProductDTO(
         String promotion
 ) {
     public static InputProductDTO from(String line) {
-        String[] parsed = line.split(",");
+        String[] parsed = line.split(DATA_FILE_FIELD_SEPERATOR);
         return new InputProductDTO(
                 parsed[0],
                 parseInteger(parsed[1]),
@@ -19,7 +22,7 @@ public record InputProductDTO(
     }
 
     public static String parsePromotion(String promotion) {
-        if (promotion.equals("null")) {
+        if (promotion.equals(NOT_PROMOTION)) {
             return null;
         }
         return promotion;
