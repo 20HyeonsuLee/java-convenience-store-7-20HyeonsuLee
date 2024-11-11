@@ -30,17 +30,30 @@ public class Store {
 
     public Integer getRequiredFreeQuantity(Order order) {
         Product product = products.find(order.getName());
-        Integer orderQuantity = order.getQuantity();
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionStock().count() < orderQuantity + product.getPromotion().getFreeQuantity()) {
+        return getMissingFreeProductsCount(product, order.getQuantity());
+    }
+
+    private Integer getMissingFreeProductsCount(Product product, Integer orderQuantity) {
+        if (isOrderExceedingPromotionStock(product, orderQuantity)) {
             return 0;
         }
-        if (orderQuantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
+        if (isMissingEligibleFreeProducts(product, orderQuantity)) {
             return product.getPromotion().getFreeQuantity();
         }
         return 0;
+    }
+
+    private boolean isOrderExceedingPromotionStock(Product product, Integer orderQuantity) {
+        int requiredStock = orderQuantity + product.getPromotion().getFreeQuantity();
+        return product.getPromotionStock().count() < requiredStock;
+    }
+
+    private boolean isMissingEligibleFreeProducts(Product product, Integer orderQuantity) {
+        int requiredQuantity = product.getPromotion().getRequiredQuantity();
+        return orderQuantity % product.getTotalQuantityForPromotion() == requiredQuantity;
     }
 
     public Integer getRequiredRegularQuantity(Order order) {

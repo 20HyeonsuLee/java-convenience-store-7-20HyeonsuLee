@@ -24,24 +24,40 @@ public class StoreController {
 
     public void run() {
         try {
-            printProduct();
-            List<Order> orders = handleInput(this::inputOrder);
-            reOrderPromotion(orders);
-            reOrderRegular(orders);
-            orders = removeEmptyOrders(orders);
-            if (orders.isEmpty()) {
-                outputView.printEmptyOrder();
-                run();
-                return;
-            }
-            outputView.printReceipt(OutputReceiptDTO.from(storeService.buy(
-                    orders,
-                    handleInput(this::inputMembershipConfirm)
-            )));
-            retryIfConfirmed();
+            processOrderFlow();
         } finally {
             Console.close();
         }
+    }
+
+    public void processOrderFlow() {
+        printProduct();
+        List<Order> orders = handleInput(this::inputOrder);
+        applyPromotionsAndRegulars(orders);
+        orders = removeEmptyOrders(orders);
+        if (orders.isEmpty()) {
+            handleEmptyOrder();
+            return;
+        }
+        printReceipt(orders);
+        retryIfConfirmed();
+    }
+
+    private void handleEmptyOrder() {
+        outputView.printEmptyOrder();
+        run();
+    }
+
+    private void printReceipt(List<Order> orders) {
+        outputView.printReceipt(OutputReceiptDTO.from(storeService.buy(
+                orders,
+                handleInput(this::inputMembershipConfirm)
+        )));
+    }
+
+    private void applyPromotionsAndRegulars(List<Order> orders) {
+        reOrderPromotion(orders);
+        reOrderRegular(orders);
     }
 
     private void retryIfConfirmed() {
