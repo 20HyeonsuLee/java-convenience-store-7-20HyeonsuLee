@@ -53,40 +53,50 @@ class StoreTest {
 
     @Test
     void 프로모션_받을_수_없을_때_가져오지_않은_상품의_개수를_반환한다() {
-        assertSimpleTest(() -> {
-            assertThat(store.getRequiredFreeQuantity(new Order(
-                    "콜라",
-                    new Quantity(7)
-            ))).isZero();
-        });
+        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
+                "콜라",
+                new Quantity(7)
+        ))).isZero());
     }
 
     @Test
     void 프로모션에_맞게_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
-        assertSimpleTest(() -> {
-            assertThat(store.getRequiredFreeQuantity(new Order(
-                    "콜라",
-                    new Quantity(6)
-            ))).isZero();
-        });
+        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
+                "콜라",
+                new Quantity(6)
+        ))).isZero());
     }
 
     @Test
     void 프로모션_재고_보다_많이_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
-        assertSimpleTest(() -> {
-            assertThat(store.getRequiredFreeQuantity(new Order(
-                    "콜라",
-                    new Quantity(11)
-            ))).isZero();
-        });
+        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
+                "콜라",
+                new Quantity(11)
+        ))).isZero());
     }
 
     @Test
-    void 프로모션_재고_보다_많은_상품을_가져왔을_때_정가로_구매되는_개수를_조회한다() {
+    void 프로모션을_받을_수_없을_만큼의_재고가_있다면_프로모션을_받지_못한다() {
         assertSimpleTest(() -> {
+            Period period = new Period(
+                    DateTimes.now().minusDays(10).toLocalDate(),
+                    DateTimes.now().toLocalDate()
+            );
+            Promotion promotion = new Promotion(
+                    "탄산",
+                    2,
+                    1,
+                    period
+            );
+            store.addProduct(new Product(
+                    "콜라",
+                    1000,
+                    promotion,
+                    new Quantity(2)
+            ));
             assertThat(store.getRequiredRegularQuantity(new Order(
                     "콜라",
-                    new Quantity(11)
+                    new Quantity(2)
             ))).isEqualTo(2);
         });
     }
