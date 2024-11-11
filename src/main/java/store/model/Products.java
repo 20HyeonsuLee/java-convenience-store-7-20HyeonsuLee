@@ -33,10 +33,10 @@ public class Products {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionQuantity().getCount() <= order.getQuantity().getCount()) {
-            return product.getPromotionQuantity().getCount() / product.getTotalQuantityForPromotion();
+        if (product.getPromotionQuantity().count() <= order.getQuantity()) {
+            return product.getPromotionQuantity().count() / product.getTotalQuantityForPromotion();
         }
-        return order.getQuantity().getCount() / product.getTotalQuantityForPromotion();
+        return order.getQuantity() / product.getTotalQuantityForPromotion();
     }
 
     public Integer getPromotableQuantity(Order order) {

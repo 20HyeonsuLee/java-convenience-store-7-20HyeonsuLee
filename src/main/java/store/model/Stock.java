@@ -1,14 +1,14 @@
 package store.model;
 
-public class Quantity {
+public class Stock {
 
     private Integer count;
 
-    public Quantity(Integer count) {
+    public Stock(Integer count) {
         this.count = count;
     }
 
-    public Integer getCount() {
+    public Integer count() {
         return count;
     }
 

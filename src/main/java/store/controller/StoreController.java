@@ -72,7 +72,7 @@ public class StoreController {
 
     private List<Order> removeEmptyOrders(List<Order> orders) {
         return orders.stream()
-                .filter(order -> order.getQuantity().getCount() != 0)
+                .filter(order -> order.getQuantity() != 0)
                 .toList();
     }
 

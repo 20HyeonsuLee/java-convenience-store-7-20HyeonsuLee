@@ -33,7 +33,7 @@ public record OutputReceiptDTO(
         public static ReceiptDetailDTO from(ReceiptDetail receiptDetail) {
             return new ReceiptDetailDTO(
                     receiptDetail.getName(),
-                    receiptDetail.getQuantity().getCount(),
+                    receiptDetail.getQuantity(),
                     receiptDetail.getPrice()
             );
         }

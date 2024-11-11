@@ -33,7 +33,7 @@ public class Receipt {
     }
 
     public Integer computeTotalCount() {
-        return orderReceipt.stream().mapToInt(receiptDetail -> receiptDetail.getQuantity().getCount()).sum();
+        return orderReceipt.stream().mapToInt(ReceiptDetail::getQuantity).sum();
     }
 
     public Integer computeTotalPrice() {

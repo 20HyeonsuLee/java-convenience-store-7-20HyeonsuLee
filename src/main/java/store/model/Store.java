@@ -30,11 +30,11 @@ public class Store {
 
     public Integer getRequiredFreeQuantity(Order order) {
         Product product = products.find(order.getName());
-        Integer quantity = order.getQuantity().getCount();
+        Integer quantity = order.getQuantity();
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionQuantity().getCount() < quantity + product.getPromotion().getFreeQuantity()) {
+        if (product.getPromotionQuantity().count() < quantity + product.getPromotion().getFreeQuantity()) {
             return 0;
         }
         if (quantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
@@ -48,7 +48,7 @@ public class Store {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        return order.getQuantity().getCount() - products.getPromotableQuantity(order);
+        return order.getQuantity() - products.getPromotableQuantity(order);
     }
 
     public Receipt buyOrders(List<Order> orders, boolean isMembership) {
@@ -62,7 +62,7 @@ public class Store {
         Integer promotableQuantity = products.getPromotableQuantity(order);
         Integer promotableCount = products.getAppliedPromotionCount(order);
         product.getPromotionQuantity().decreaseBy(promotableQuantity);
-        Integer reminderQuantity = order.getQuantity().getCount() - promotableQuantity;
+        Integer reminderQuantity = order.getQuantity() - promotableQuantity;
         addMembershipDiscountPrice(receipt, product, isMembership, reminderQuantity);
         reminderQuantity = product.getPromotionQuantity().decreaseBy(reminderQuantity);
         product.getRegularQuantity().decreaseBy(reminderQuantity);
@@ -80,7 +80,7 @@ public class Store {
         receipt.addOrderProduct(new ReceiptDetail(
                 order.getName(),
                 order.getQuantity(),
-                order.getQuantity().getCount() * product.getPrice()
+                order.getQuantity() * product.getPrice()
         ));
     }
 
@@ -88,7 +88,7 @@ public class Store {
         if (promotionCount > 0) {
             receipt.addFreeProduct(new ReceiptDetail(
                     order.getName(),
-                    new Quantity(product.getPromotion().getFreeQuantity() * promotionCount),
+                    product.getPromotion().getFreeQuantity() * promotionCount,
                     product.getPrice() * promotionCount
             ));
         }

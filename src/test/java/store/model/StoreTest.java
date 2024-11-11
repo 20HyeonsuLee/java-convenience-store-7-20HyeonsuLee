@@ -21,7 +21,7 @@ class StoreTest {
                 "콜라",
                 1000,
                 null,
-                new Quantity(10)
+                new Stock(10)
         ));
         Period period = new Period(
                 DateTimes.now().minusDays(10).toLocalDate(),
@@ -37,7 +37,7 @@ class StoreTest {
                 "콜라",
                 1000,
                 promotion,
-                new Quantity(10)
+                new Stock(10)
         ));
     }
 
@@ -46,7 +46,7 @@ class StoreTest {
         assertSimpleTest(() -> {
             assertThat(store.getRequiredFreeQuantity(new Order(
                     "콜라",
-                    new Quantity(8)
+                    8
             ))).isEqualTo(1);
         });
     }
@@ -55,7 +55,7 @@ class StoreTest {
     void 프로모션_받을_수_없을_때_가져오지_않은_상품의_개수를_반환한다() {
         assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
                 "콜라",
-                new Quantity(7)
+                7
         ))).isZero());
     }
 
@@ -63,7 +63,7 @@ class StoreTest {
     void 프로모션에_맞게_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
         assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
                 "콜라",
-                new Quantity(6)
+                6
         ))).isZero());
     }
 
@@ -71,7 +71,7 @@ class StoreTest {
     void 프로모션_재고_보다_많이_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
         assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
                 "콜라",
-                new Quantity(11)
+                11
         ))).isZero());
     }
 
@@ -92,11 +92,11 @@ class StoreTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(2)
+                    new Stock(2)
             ));
             assertThat(store.getRequiredRegularQuantity(new Order(
                     "콜라",
-                    new Quantity(2)
+                    2
             ))).isEqualTo(2);
         });
     }
@@ -104,16 +104,16 @@ class StoreTest {
     @Test
     void 상점에서_상품을_구매한다() {
         assertSimpleTest(() -> {
-            Receipt receipt = store.buyOrders(List.of(new Order("콜라", new Quantity(11))), MEMBERSHIP);
+            Receipt receipt = store.buyOrders(List.of(new Order("콜라", 11)), MEMBERSHIP);
             assertThat(receipt.getOrderReceipt().get(0).getName()).isEqualTo("콜라");
-            assertThat(receipt.getOrderReceipt().get(0).getQuantity().getCount()).isEqualTo(11);
-            assertThat(receipt.getFreeReceipt().get(0).getQuantity().getCount()).isEqualTo(3);
+            assertThat(receipt.getOrderReceipt().get(0).getQuantity()).isEqualTo(11);
+            assertThat(receipt.getFreeReceipt().get(0).getQuantity()).isEqualTo(3);
             assertThat(receipt.computePromotionDiscountPrice()).isEqualTo(3_000);
             assertThat(receipt.computeTotalCount()).isEqualTo(11);
             assertThat(receipt.computeTotalPrice()).isEqualTo(11_000);
             assertThat(receipt.computeAmount()).isEqualTo(7_400);
-            assertThat(store.getProducts().find("콜라").getPromotionQuantity().getCount()).isZero();
-            assertThat(store.getProducts().find("콜라").getRegularQuantity().getCount()).isEqualTo(9);
+            assertThat(store.getProducts().find("콜라").getPromotionQuantity().count()).isZero();
+            assertThat(store.getProducts().find("콜라").getRegularQuantity().count()).isEqualTo(9);
         });
     }
 

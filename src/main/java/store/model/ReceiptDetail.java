@@ -2,9 +2,9 @@ package store.model;
 
 public class ReceiptDetail implements Comparable<ReceiptDetail> {
     String name;
-    Quantity quantity;
+    Integer quantity;
     Integer price;
-    public ReceiptDetail(String name, Quantity quantity, Integer price) {
+    public ReceiptDetail(String name, Integer quantity, Integer price) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -14,7 +14,7 @@ public class ReceiptDetail implements Comparable<ReceiptDetail> {
         return name;
     }
 
-    public Quantity getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
@@ -24,6 +24,6 @@ public class ReceiptDetail implements Comparable<ReceiptDetail> {
 
     @Override
     public int compareTo(ReceiptDetail other) {
-        return this.quantity.getCount().compareTo(other.getQuantity().getCount());
+        return this.quantity.compareTo(other.getQuantity());
     }
 }

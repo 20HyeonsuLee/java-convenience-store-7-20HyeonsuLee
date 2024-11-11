@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import store.exception.InputFormatException;
 import store.exception.OrderFormatException;
 import store.model.Order;
-import store.model.Quantity;
 
 public class Parser {
 
@@ -44,7 +43,7 @@ public class Parser {
         }
         String name = matcher.group(PRODUCT_NAME_GROUP_INDEX);
         Integer quantity = parseQuantity(matcher.group(QUANTITY_GROUP_INDEX));
-        return new Order(name, new Quantity(quantity));
+        return new Order(name, quantity);
     }
 
     private static Integer parseQuantity(String quantity) {

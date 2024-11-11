@@ -23,13 +23,13 @@ class ProductsTest {
                     "콜라",
                     1000,
                     null,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isFalse();
-            assertThat(products.find("콜라").getRegularQuantity().getCount()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().getCount()).isZero();
+            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionQuantity().count()).isZero();
             assertThat(products.find("콜라").isPromotionPeriod()).isFalse();
 
         });
@@ -52,13 +52,13 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().getCount()).isZero();
-            assertThat(products.find("콜라").getPromotionQuantity().getCount()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularQuantity().count()).isZero();
+            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -80,19 +80,19 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             products.addProduct(new Product(
                     "콜라",
                     1000,
                     null,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().getCount()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().getCount()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -104,7 +104,7 @@ class ProductsTest {
                     "콜라",
                     1000,
                     null,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             Period period = new Period(
                     DateTimes.now().minusDays(10).toLocalDate(),
@@ -120,13 +120,13 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().getCount()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().getCount()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -138,19 +138,19 @@ class ProductsTest {
                     "콜라",
                     1000,
                     null,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             products.addProduct(new Product(
                     "콜라",
                     1500,
                     null,
-                    new Quantity(15)
+                    new Stock(15)
             ));
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1500);
             assertThat(products.find("콜라").isPromotionProduct()).isFalse();
-            assertThat(products.find("콜라").getRegularQuantity().getCount()).isEqualTo(15);
-            assertThat(products.find("콜라").getPromotionQuantity().getCount()).isZero();
+            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(15);
+            assertThat(products.find("콜라").getPromotionQuantity().count()).isZero();
             assertThat(products.find("콜라").isPromotionPeriod()).isFalse();
         });
     }
@@ -162,9 +162,9 @@ class ProductsTest {
                     "콜라",
                     1000,
                     null,
-                    new Quantity(10)
+                    new Stock(10)
             ));
-            assertThat(products.getAppliedPromotionCount(new Order("콜라", new Quantity(10)))).isZero();
+            assertThat(products.getAppliedPromotionCount(new Order("콜라", 10))).isZero();
         });
     }
 
@@ -185,11 +185,11 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.getAppliedPromotionCount(new Order(
                     "콜라",
-                    new Quantity(10)
+                    10
             ))).isEqualTo(3);
         });
     }
@@ -211,11 +211,11 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.getPromotableQuantity(new Order(
                     "콜라",
-                    new Quantity(10)
+                    10
             ))).isEqualTo(9);
         });
     }
@@ -237,11 +237,11 @@ class ProductsTest {
                     "콜라",
                     1000,
                     promotion,
-                    new Quantity(10)
+                    new Stock(10)
             ));
             assertThat(products.getAppliedPromotionCount(new Order(
                     "콜라",
-                    new Quantity(15)
+                    15
             ))).isEqualTo(3);
         });
     }

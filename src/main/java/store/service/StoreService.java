@@ -9,7 +9,7 @@ import store.exception.QuantityOverflowException;
 import store.model.Order;
 import store.model.Period;
 import store.model.Promotion;
-import store.model.Quantity;
+import store.model.Stock;
 import store.model.Receipt;
 import store.model.Store;
 import store.model.Product;
@@ -27,7 +27,7 @@ public class StoreService {
 
     public void validateOrderQuantity(Order order) {
         Product product = store.findProduct(order.getName());
-        if (product.getTotalQuantity() < order.getQuantity().getCount()) {
+        if (product.getTotalQuantity() < order.getQuantity()) {
             throw new QuantityOverflowException();
         }
     }
@@ -46,7 +46,7 @@ public class StoreService {
 
     public void reOrderPromotion(Order order, boolean isConfirmed) {
         if (isConfirmed) {
-            order.getQuantity().increaseBy(getRequiredFreeQuantity(order));
+            order.increaseQuantity(getRequiredFreeQuantity(order));
         }
     }
 
@@ -56,7 +56,7 @@ public class StoreService {
 
     public void reOrderOrder(Order order, boolean isConfirmed) {
         if (!isConfirmed) {
-            order.getQuantity().decreaseBy(store.getRequiredRegularQuantity(order));
+            order.decreaseQuantity(store.getRequiredRegularQuantity(order));
         }
     }
 
@@ -88,7 +88,7 @@ public class StoreService {
                 product.name(),
                 product.price(),
                 store.getPromotion(product.promotion()),
-                new Quantity(product.quantity())
+                new Stock(product.quantity())
         )));
     }
 
@@ -96,7 +96,7 @@ public class StoreService {
         return new OutputProductDTO(
                 product.getName(),
                 product.getPrice(),
-                product.getRegularQuantity().getCount(),
+                product.getRegularQuantity().count(),
                 EMPTY_PROMOTION
         );
     }
@@ -105,7 +105,7 @@ public class StoreService {
         return new OutputProductDTO(
                 product.getName(),
                 product.getPrice(),
-                product.getPromotionQuantity().getCount(),
+                product.getPromotionQuantity().count(),
                 product.getPromotion().getName()
         );
     }

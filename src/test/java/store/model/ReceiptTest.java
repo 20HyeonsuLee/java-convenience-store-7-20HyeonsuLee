@@ -13,9 +13,9 @@ class ReceiptTest {
     @BeforeEach
     void setup() {
         receipt = new Receipt();
-        receipt.addOrderProduct(new ReceiptDetail("콜라", new Quantity(10), 15_000));
-        receipt.addOrderProduct(new ReceiptDetail("마늘", new Quantity(5), 5_000));
-        receipt.addFreeProduct(new ReceiptDetail("콜라", new Quantity(3), 3_000));
+        receipt.addOrderProduct(new ReceiptDetail("콜라", 10, 15_000));
+        receipt.addOrderProduct(new ReceiptDetail("마늘", 5, 5_000));
+        receipt.addFreeProduct(new ReceiptDetail("콜라", 3, 3_000));
         receipt.addMembershipDiscountPrice(3_000);
     }
 

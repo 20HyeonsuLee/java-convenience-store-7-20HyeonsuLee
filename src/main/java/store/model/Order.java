@@ -2,9 +2,9 @@ package store.model;
 
 public class Order {
     private final String name;
-    private final Quantity quantity;
+    private Integer quantity;
 
-    public Order(String name, Quantity quantity) {
+    public Order(String name, Integer quantity) {
         this.name = name;
         this.quantity = quantity;
     }
@@ -13,7 +13,15 @@ public class Order {
         return name;
     }
 
-    public Quantity getQuantity() {
+    public Integer getQuantity() {
         return quantity;
+    }
+
+    public void increaseQuantity(Integer count) {
+        this.quantity += count;
+    }
+
+    public void decreaseQuantity(Integer count) {
+        this.quantity -= count;
     }
 }
