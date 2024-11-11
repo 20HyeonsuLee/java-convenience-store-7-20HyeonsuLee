@@ -30,8 +30,19 @@ public class StoreController {
         reStoreWhenEmptyOrders(orders);
         Receipt receipt = storeService.buy(orders, handleInput(this::inputMembershipConfirm));
         outputView.printReceipt(OutputReceiptDTO.from(receipt));
+        reTry();
     }
 
+    private void reTry() {
+        if (handleInput(this::inputReOrderConfirm)) {
+            run();
+        }
+    }
+
+    private boolean inputReOrderConfirm() {
+        String confirm = inputView.inputReOrder();
+        return Parser.parseConfirm(confirm);
+    }
 
     private boolean inputMembershipConfirm() {
         String confirm = inputView.inputMemberShip();
