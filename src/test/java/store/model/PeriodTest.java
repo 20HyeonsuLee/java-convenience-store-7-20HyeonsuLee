@@ -14,7 +14,7 @@ class PeriodTest {
         assertThatThrownBy(() -> new Period(
                 DateTimes.now().plusDays(1).toLocalDate(),
                 DateTimes.now().toLocalDate()
-        )).isInstanceOf(IllegalStateException.class);
+        )).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

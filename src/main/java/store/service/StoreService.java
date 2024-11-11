@@ -54,7 +54,7 @@ public class StoreService {
         return store.findProduct(order.getName()).isPromotionPeriod();
     }
 
-    public void reOrderOrder(Order order, boolean isConfirmed) {
+    public void reOrderRegular(Order order, boolean isConfirmed) {
         if (!isConfirmed) {
             order.decreaseQuantity(store.getRequiredRegularQuantity(order));
         }

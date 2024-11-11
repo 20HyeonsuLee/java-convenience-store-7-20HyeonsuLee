@@ -7,6 +7,8 @@ import camp.nextstep.edu.missionutils.DateTimes;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class StoreTest {
 
@@ -17,87 +19,41 @@ class StoreTest {
     @BeforeEach
     void setup() {
         store = new Store();
-        store.addProduct(new Product(
-                "콜라",
-                1000,
-                null,
-                new Stock(10)
-        ));
+        store.addProduct(new Product("콜라", 1000, null, new Stock(10)));
+        store.addProduct(new Product("콜라", 1000, createPromotion(), new Stock(10)));
+    }
+
+    private Promotion createPromotion() {
         Period period = new Period(
                 DateTimes.now().minusDays(10).toLocalDate(),
                 DateTimes.now().toLocalDate()
         );
-        Promotion promotion = new Promotion(
-                "탄산",
-                2,
-                1,
-                period
-        );
-        store.addProduct(new Product(
-                "콜라",
-                1000,
-                promotion,
-                new Stock(10)
-        ));
+        return new Promotion("탄산", 2, 1, period);
     }
 
-    @Test
-    void 프로모션_받을_수_있는데_가져오지_않은_상품의_개수를_반환한다() {
+    private Order createOrder(String name, int quantity) {
+        return new Order(name, quantity);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1, 8",   // 프로모션 받을 수 있는데 가져오지 않은 상품 개수
+            "0, 7",   // 프로모션 받을 수 없을 때 가져오지 않은 상품 개수
+            "0, 6",   // 프로모션에 맞게 가져왔을 때 더 가져와야 할 상품 없음
+            "0, 11"   // 프로모션 재고보다 많이 가져왔을 때 더 가져와야 할 상품 없음
+    })
+    void 프로모션_상품의_가져오지_않은_개수_확인(int expectedFreeQuantity, int orderQuantity) {
         assertSimpleTest(() -> {
-            assertThat(store.getRequiredFreeQuantity(new Order(
-                    "콜라",
-                    8
-            ))).isEqualTo(1);
+            Order order = createOrder("콜라", orderQuantity);
+            assertThat(store.getRequiredFreeQuantity(order)).isEqualTo(expectedFreeQuantity);
         });
-    }
-
-    @Test
-    void 프로모션_받을_수_없을_때_가져오지_않은_상품의_개수를_반환한다() {
-        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
-                "콜라",
-                7
-        ))).isZero());
-    }
-
-    @Test
-    void 프로모션에_맞게_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
-        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
-                "콜라",
-                6
-        ))).isZero());
-    }
-
-    @Test
-    void 프로모션_재고_보다_많이_상품을_가져왔을때_더_가져와야_하는_상품은_없다() {
-        assertSimpleTest(() -> assertThat(store.getRequiredFreeQuantity(new Order(
-                "콜라",
-                11
-        ))).isZero());
     }
 
     @Test
     void 프로모션을_받을_수_없을_만큼의_재고가_있다면_프로모션을_받지_못한다() {
         assertSimpleTest(() -> {
-            Period period = new Period(
-                    DateTimes.now().minusDays(10).toLocalDate(),
-                    DateTimes.now().toLocalDate()
-            );
-            Promotion promotion = new Promotion(
-                    "탄산",
-                    2,
-                    1,
-                    period
-            );
-            store.addProduct(new Product(
-                    "콜라",
-                    1000,
-                    promotion,
-                    new Stock(2)
-            ));
-            assertThat(store.getRequiredRegularQuantity(new Order(
-                    "콜라",
-                    2
-            ))).isEqualTo(2);
+            store.addProduct(new Product("콜라", 1000, createPromotion(), new Stock(2)));
+            assertThat(store.getRequiredRegularQuantity(createOrder("콜라", 2))).isEqualTo(2);
         });
     }
 
@@ -116,5 +72,4 @@ class StoreTest {
             assertThat(store.getProducts().find("콜라").getRegularStock().count()).isEqualTo(9);
         });
     }
-
 }
