@@ -5,22 +5,33 @@ public class Quantity {
     private Integer count;
 
     public Quantity(Integer count) {
-        validateQuantityCount(count);
         this.count = count;
-    }
-
-    private void validateQuantityCount(Integer count) {
-        if (count < 0) {
-            throw new IllegalStateException("재고 수량은 0개 이상이여야 합니다.");
-        }
     }
 
     public Integer getCount() {
         return count;
     }
 
-    public void decreaseBy(Integer quantity) {
+    public Integer decreaseBy(Integer quantity) {
+        if (hasEnoughQuantity(quantity)) {
+            decreaseQuantity(quantity);
+            return 0;
+        }
+        return getRemainingQuantity(quantity);
+    }
+
+    private boolean hasEnoughQuantity(Integer quantity) {
+        return this.count >= quantity;
+    }
+
+    private void decreaseQuantity(Integer quantity) {
         this.count -= quantity;
+    }
+
+    private Integer getRemainingQuantity(Integer quantity) {
+        int remaining = quantity - this.count;
+        decreaseQuantity(this.count);
+        return remaining;
     }
 
     public void increaseBy(Integer quantity) {
