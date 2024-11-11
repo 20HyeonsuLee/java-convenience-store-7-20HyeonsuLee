@@ -1,5 +1,6 @@
 package store.controller;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
 import java.util.function.Supplier;
 import store.dto.InputProductDTO;
@@ -22,21 +23,25 @@ public class StoreController {
     }
 
     public void run() {
-        printProduct();
-        List<Order> orders = handleInput(this::inputOrder);
-        reOrderPromotion(orders);
-        reOrderRegular(orders);
-        orders = removeEmptyOrders(orders);
-        if (orders.isEmpty()) {
-            outputView.printEmptyOrder();
-            run();
-            return;
+        try {
+            printProduct();
+            List<Order> orders = handleInput(this::inputOrder);
+            reOrderPromotion(orders);
+            reOrderRegular(orders);
+            orders = removeEmptyOrders(orders);
+            if (orders.isEmpty()) {
+                outputView.printEmptyOrder();
+                run();
+                return;
+            }
+            outputView.printReceipt(OutputReceiptDTO.from(storeService.buy(
+                    orders,
+                    handleInput(this::inputMembershipConfirm)
+            )));
+            retryIfConfirmed();
+        } finally {
+            Console.close();
         }
-        outputView.printReceipt(OutputReceiptDTO.from(storeService.buy(
-                orders,
-                handleInput(this::inputMembershipConfirm)
-        )));
-        retryIfConfirmed();
     }
 
     private void retryIfConfirmed() {
@@ -64,7 +69,7 @@ public class StoreController {
         orders.forEach(order -> {
             int requiredRegularQuantity = storeService.getRequiredRegularQuantity(order);
             if (storeService.isPromotionOrder(order) && requiredRegularQuantity > 0) {
-                storeService.reOrderOrder(order,
+                storeService.reOrderRegular(order,
                         handleInput(() -> inputReOrderRegular(order, requiredRegularQuantity)));
             }
         });
