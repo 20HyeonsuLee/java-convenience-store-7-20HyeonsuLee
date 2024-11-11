@@ -28,8 +28,8 @@ class ProductsTest {
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isFalse();
-            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().count()).isZero();
+            assertThat(products.find("콜라").getRegularStock().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionStock().count()).isZero();
             assertThat(products.find("콜라").isPromotionPeriod()).isFalse();
 
         });
@@ -57,8 +57,8 @@ class ProductsTest {
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().count()).isZero();
-            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularStock().count()).isZero();
+            assertThat(products.find("콜라").getPromotionStock().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -91,8 +91,8 @@ class ProductsTest {
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularStock().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionStock().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -125,8 +125,8 @@ class ProductsTest {
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1000);
             assertThat(products.find("콜라").isPromotionProduct()).isTrue();
-            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(10);
-            assertThat(products.find("콜라").getPromotionQuantity().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getRegularStock().count()).isEqualTo(10);
+            assertThat(products.find("콜라").getPromotionStock().count()).isEqualTo(10);
             assertThat(products.find("콜라").isPromotionPeriod()).isTrue();
         });
     }
@@ -149,8 +149,8 @@ class ProductsTest {
             assertThat(products.find("콜라").getName()).isEqualTo("콜라");
             assertThat(products.find("콜라").getPrice()).isEqualTo(1500);
             assertThat(products.find("콜라").isPromotionProduct()).isFalse();
-            assertThat(products.find("콜라").getRegularQuantity().count()).isEqualTo(15);
-            assertThat(products.find("콜라").getPromotionQuantity().count()).isZero();
+            assertThat(products.find("콜라").getRegularStock().count()).isEqualTo(15);
+            assertThat(products.find("콜라").getPromotionStock().count()).isZero();
             assertThat(products.find("콜라").isPromotionPeriod()).isFalse();
         });
     }

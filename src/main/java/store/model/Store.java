@@ -34,7 +34,7 @@ public class Store {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionQuantity().count() < quantity + product.getPromotion().getFreeQuantity()) {
+        if (product.getPromotionStock().count() < quantity + product.getPromotion().getFreeQuantity()) {
             return 0;
         }
         if (quantity % product.getTotalQuantityForPromotion() == product.getPromotion().getRequiredQuantity()) {
@@ -61,11 +61,11 @@ public class Store {
         Product product = products.find(order.getName());
         Integer promotableQuantity = products.getPromotableQuantity(order);
         Integer promotableCount = products.getAppliedPromotionCount(order);
-        product.getPromotionQuantity().decreaseBy(promotableQuantity);
+        product.getPromotionStock().decreaseBy(promotableQuantity);
         Integer reminderQuantity = order.getQuantity() - promotableQuantity;
         addMembershipDiscountPrice(receipt, product, isMembership, reminderQuantity);
-        reminderQuantity = product.getPromotionQuantity().decreaseBy(reminderQuantity);
-        product.getRegularQuantity().decreaseBy(reminderQuantity);
+        reminderQuantity = product.getPromotionStock().decreaseBy(reminderQuantity);
+        product.getRegularStock().decreaseBy(reminderQuantity);
         addOrderProduct(receipt, order, product);
         addFreeProduct(receipt, promotableCount, order, product);
     }

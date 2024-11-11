@@ -112,8 +112,8 @@ class StoreTest {
             assertThat(receipt.computeTotalCount()).isEqualTo(11);
             assertThat(receipt.computeTotalPrice()).isEqualTo(11_000);
             assertThat(receipt.computeAmount()).isEqualTo(7_400);
-            assertThat(store.getProducts().find("콜라").getPromotionQuantity().count()).isZero();
-            assertThat(store.getProducts().find("콜라").getRegularQuantity().count()).isEqualTo(9);
+            assertThat(store.getProducts().find("콜라").getPromotionStock().count()).isZero();
+            assertThat(store.getProducts().find("콜라").getRegularStock().count()).isEqualTo(9);
         });
     }
 

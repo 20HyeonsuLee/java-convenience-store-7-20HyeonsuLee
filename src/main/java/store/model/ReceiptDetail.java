@@ -1,9 +1,11 @@
 package store.model;
 
 public class ReceiptDetail implements Comparable<ReceiptDetail> {
-    String name;
-    Integer quantity;
-    Integer price;
+
+    private final String name;
+    private final Integer quantity;
+    private final Integer price;
+
     public ReceiptDetail(String name, Integer quantity, Integer price) {
         this.name = name;
         this.quantity = quantity;

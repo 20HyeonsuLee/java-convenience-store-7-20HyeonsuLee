@@ -33,8 +33,8 @@ public class Products {
         if (!product.isPromotionPeriod()) {
             return 0;
         }
-        if (product.getPromotionQuantity().count() <= order.getQuantity()) {
-            return product.getPromotionQuantity().count() / product.getTotalQuantityForPromotion();
+        if (product.getPromotionStock().count() <= order.getQuantity()) {
+            return product.getPromotionStock().count() / product.getTotalQuantityForPromotion();
         }
         return order.getQuantity() / product.getTotalQuantityForPromotion();
     }
@@ -55,13 +55,13 @@ public class Products {
 
     private void updateRegular(Product existingProduct, Product newProduct) {
         if (!newProduct.isPromotionProduct()) {
-            existingProduct.setRegularQuantity(newProduct.getRegularQuantity());
+            existingProduct.setRegularStock(newProduct.getRegularStock());
         }
     }
 
     private void updatePromotion(Product existingProduct, Product newProduct) {
         if (newProduct.isPromotionProduct()) {
-            existingProduct.setPromotionQuantity(newProduct.getPromotionQuantity());
+            existingProduct.setPromotionStock(newProduct.getPromotionStock());
             existingProduct.setPromotion(newProduct.getPromotion());
         }
     }

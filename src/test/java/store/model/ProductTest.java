@@ -20,8 +20,8 @@ class ProductTest {
             assertThat(product.getName()).isEqualTo("콜라");
             assertThat(product.getPrice()).isEqualTo(1000);
             assertThat(product.getPromotion()).isNull();
-            assertThat(product.getRegularQuantity().count()).isEqualTo(10);
-            assertThat(product.getPromotionQuantity().count()).isZero();
+            assertThat(product.getRegularStock().count()).isEqualTo(10);
+            assertThat(product.getPromotionStock().count()).isZero();
             assertThat(product.isPromotionPeriod()).isFalse();
         });
     }
@@ -48,8 +48,8 @@ class ProductTest {
             assertThat(product.getName()).isEqualTo("콜라");
             assertThat(product.getPrice()).isEqualTo(1000);
             assertThat(product.getPromotion()).isNotNull();
-            assertThat(product.getPromotionQuantity().count()).isEqualTo(10);
-            assertThat(product.getRegularQuantity().count()).isZero();
+            assertThat(product.getPromotionStock().count()).isEqualTo(10);
+            assertThat(product.getRegularStock().count()).isZero();
             assertThat(product.isPromotionPeriod()).isTrue();
         });
     }

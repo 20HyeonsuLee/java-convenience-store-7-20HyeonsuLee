@@ -3,8 +3,8 @@ package store.model;
 public class Product {
     private final String name;
     private Integer price;
-    private Stock regularQuantity;
-    private Stock promotionQuantity;
+    private Stock regularStock;
+    private Stock promotionStock;
     private Promotion promotion;
 
     public Product(String name, Integer price, Promotion promotion, Stock quantity) {
@@ -23,17 +23,17 @@ public class Product {
         this.price = price;
     }
 
-    private void setRegular(Promotion promotion, Stock quantity) {
+    private void setRegular(Promotion promotion, Stock stock) {
         if (promotion == null) {
-            this.regularQuantity = quantity;
-            this.promotionQuantity = new Stock(0);
+            this.regularStock = stock;
+            this.promotionStock = new Stock(0);
         }
     }
 
-    private void setPromotion(Promotion promotion, Stock quantity) {
+    private void setPromotion(Promotion promotion, Stock stock) {
         if (promotion != null) {
-            this.promotionQuantity = quantity;
-            this.regularQuantity = new Stock(0);
+            this.promotionStock = stock;
+            this.regularStock = new Stock(0);
         }
     }
 
@@ -41,19 +41,19 @@ public class Product {
         return name;
     }
 
-    public Stock getRegularQuantity() {
-        return regularQuantity;
+    public Stock getRegularStock() {
+        return regularStock;
     }
 
-    public Stock getPromotionQuantity() {
+    public Stock getPromotionStock() {
         if (!isPromotionPeriod()) {
             return new Stock(0);
         }
-        return promotionQuantity;
+        return promotionStock;
     }
 
-    public Integer getTotalQuantity() {
-        return regularQuantity.count() + promotionQuantity.count();
+    public Integer getTotalStockQuantity() {
+        return regularStock.count() + promotionStock.count();
     }
 
     public Integer getPrice() {
@@ -68,16 +68,16 @@ public class Product {
         return promotion;
     }
 
-    public void setRegularQuantity(Stock regularQuantity) {
-        this.regularQuantity = regularQuantity;
+    public void setRegularStock(Stock regularStock) {
+        this.regularStock = regularStock;
     }
 
     public void setPromotion(Promotion promotion) {
         this.promotion = promotion;
     }
 
-    public void setPromotionQuantity(Stock quantity) {
-        this.promotionQuantity = quantity;
+    public void setPromotionStock(Stock quantity) {
+        this.promotionStock = quantity;
     }
 
     public boolean isPromotionPeriod() {

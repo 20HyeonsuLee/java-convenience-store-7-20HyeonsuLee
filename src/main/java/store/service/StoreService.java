@@ -27,7 +27,7 @@ public class StoreService {
 
     public void validateOrderQuantity(Order order) {
         Product product = store.findProduct(order.getName());
-        if (product.getTotalQuantity() < order.getQuantity()) {
+        if (product.getTotalStockQuantity() < order.getQuantity()) {
             throw new QuantityOverflowException();
         }
     }
@@ -96,7 +96,7 @@ public class StoreService {
         return new OutputProductDTO(
                 product.getName(),
                 product.getPrice(),
-                product.getRegularQuantity().count(),
+                product.getRegularStock().count(),
                 EMPTY_PROMOTION
         );
     }
@@ -105,7 +105,7 @@ public class StoreService {
         return new OutputProductDTO(
                 product.getName(),
                 product.getPrice(),
-                product.getPromotionQuantity().count(),
+                product.getPromotionStock().count(),
                 product.getPromotion().getName()
         );
     }
