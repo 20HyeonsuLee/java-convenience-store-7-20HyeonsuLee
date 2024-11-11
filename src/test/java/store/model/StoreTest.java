@@ -4,6 +4,7 @@ import static camp.nextstep.edu.missionutils.test.Assertions.assertSimpleTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import camp.nextstep.edu.missionutils.DateTimes;
+import java.util.List;
 import org.assertj.core.error.ShouldBePeriod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import store.model.product.Products;
 class StoreTest {
 
     private Store store;
+
+    private static final boolean MEMBERSHIP = true;
 
     @BeforeEach
     void setup() {
@@ -100,4 +103,21 @@ class StoreTest {
             ))).isEqualTo(2);
         });
     }
+
+    @Test
+    void 상점에서_상품을_구매한다() {
+        assertSimpleTest(() -> {
+            Receipt receipt = store.buyOrders(List.of(new Order("콜라", new Quantity(11))), MEMBERSHIP);
+            assertThat(receipt.getOrderReceipt().get(0).getName()).isEqualTo("콜라");
+            assertThat(receipt.getOrderReceipt().get(0).getQuantity().getCount()).isEqualTo(11);
+            assertThat(receipt.getFreeReceipt().get(0).getQuantity().getCount()).isEqualTo(3);
+            assertThat(receipt.computePromotionDiscountPrice()).isEqualTo(3_000);
+            assertThat(receipt.computeTotalCount()).isEqualTo(11);
+            assertThat(receipt.computeTotalPrice()).isEqualTo(11_000);
+            assertThat(receipt.computeAmount()).isEqualTo(7_400);
+            assertThat(store.getProducts().find("콜라").getPromotionQuantity().getCount()).isZero();
+            assertThat(store.getProducts().find("콜라").getRegularQuantity().getCount()).isEqualTo(9);
+        });
+    }
+
 }

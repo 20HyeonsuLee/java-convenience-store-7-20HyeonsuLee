@@ -21,4 +21,22 @@ class QuantityTest {
             assertThat(quantity.getCount()).isEqualTo(5);
         });
     }
+
+    @Test
+    void 재고보다_적은_수량을_감소시킨다() {
+        assertSimpleTest(() -> {
+            Quantity quantity = new Quantity(5);
+            quantity.decreaseBy(3);
+            assertThat(quantity.getCount()).isEqualTo(2);
+        });
+    }
+
+    @Test
+    void 재고보다_많은_수량을_감소시킨다() {
+        assertSimpleTest(() -> {
+            Quantity quantity = new Quantity(5);
+            quantity.decreaseBy(10);
+            assertThat(quantity.getCount()).isEqualTo(0);
+        });
+    }
 }
