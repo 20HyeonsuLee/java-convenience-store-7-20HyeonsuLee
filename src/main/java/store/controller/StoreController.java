@@ -27,8 +27,9 @@ public class StoreController {
         List<Order> orders = handleInput(this::inputOrder);
         reOrderPromotion(orders);
         reOrderRegular(orders);
-        reStoreWhenEmptyOrders(orders);
-        Receipt receipt = storeService.buy(orders, handleInput(this::inputMembershipConfirm));
+        List<Order> cleanedOrders = cleanOrders(orders);
+        reStoreWhenEmptyOrders(cleanedOrders);
+        Receipt receipt = storeService.buy(cleanedOrders, handleInput(this::inputMembershipConfirm));
         outputView.printReceipt(OutputReceiptDTO.from(receipt));
         reTry();
     }
@@ -63,11 +64,16 @@ public class StoreController {
     }
 
     private void reStoreWhenEmptyOrders(List<Order> orders) {
-        orders.removeIf(order -> order.getQuantity().getCount() <= 0);
         if (orders.isEmpty()) {
             outputView.printEmptyOrder();
             run();
         }
+    }
+
+    private List<Order> cleanOrders(List<Order> orders) {
+        return orders.stream()
+                .filter(order -> order.getQuantity().getCount() != 0)
+                .toList();
     }
 
     private boolean inputReOrderRegular(Order order, Integer count) {

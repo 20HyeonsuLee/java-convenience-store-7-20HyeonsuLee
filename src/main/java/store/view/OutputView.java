@@ -30,10 +30,17 @@ public class OutputView {
         products.forEach(product -> stringBuilder.appendLine(OUTPUT_PRODUCT_INFO_MESSAGE.format(
                 product.name(),
                 product.price(),
-                product.quantity(),
+                convertQuantityFormat(product.quantity()),
                 product.promotion()
         )));
         stringBuilder.print();
+    }
+
+    private String convertQuantityFormat(Integer quantity) {
+        if (quantity == 0) {
+            return "재고 없음";
+        }
+        return String.valueOf(quantity);
     }
 
     public void printReceipt(OutputReceiptDTO outputReceiptDTO) {
